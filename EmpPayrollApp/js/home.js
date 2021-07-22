@@ -1,10 +1,11 @@
 let empPayrollList;
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    empPayrollList = getEmployeePayrollDataFromStorage();
-    document.querySelector(".emp-count").textContent = empPayrollList.length;
-    createInnerHtml();
-    localStorage.removeItem('editEmp');
+    if(site_properties.use_local_storage.match("true")){
+        getEmployeePayrollDataFromStorage();
+    }else{
+        getEmployeePayrollDataFromServer();
+    }
 })
 
 /**
@@ -12,8 +13,30 @@ window.addEventListener('DOMContentLoaded', (event) => {
  * @returns 
  */
 const getEmployeePayrollDataFromStorage = () => {
-    return localStorage.getItem('EmployeePayrollList') ?
+    empPayrollList = localStorage.getItem('EmployeePayrollList') ?
         JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+    
+    processEmployeePayrollDataResponse();
+}
+
+const processEmployeePayrollDataResponse = () => {
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+    createInnerHtml();
+    localStorage.removeItem('editEmp');
+}
+
+const getEmployeePayrollDataFromServer = () => {
+    makeServiceCall("GET", site_properties.server_url, true)
+        .then(responseText => {
+            empPayrollList = JSON.parse(responseText);
+            alert(empPayrollList);
+            processEmployeePayrollDataResponse();
+        })
+        .catch(error => {
+            console.log("Get Error Status: " + JSON.stringify(error))
+            empPayrollList = [];
+            processEmployeePayrollDataResponse();
+        });
 }
 
 /**
@@ -74,3 +97,31 @@ const remove = (node) => {
 const storeDataToLocalStorage = () => {
     localStorage.setItem('EmployeePayrollList', JSON.stringify(empPayrollList));
 }
+
+// let XMLHttpRequest = require("../../server/node_modules/xmlhttprequest").XMLHttpRequest;
+
+function makeServiceCall(methodType, url, async = true, data = null) {
+     return new Promise(function (resolve, reject) {
+         let xhr = new XMLHttpRequest();
+         xhr.onreadystatechange = function () {
+             console.log("State Changed Called. Ready State: " + xhr.readyState + " Status: " + xhr.status);
+             if (xhr.status.toString().match('^[2][0-9]{2}$')) {
+                 resolve(xhr.responseText);
+             }else if(xhr.status.toString().match('^[4,5][0-9]{2}$')){
+                 reject({
+                     status: xhr.status,
+                     statusText: xhr.statusText
+                 });
+                 console.log("XHR Failed");
+             }
+         }
+ 
+         xhr.open(methodType, url, async);
+         if (data) {
+             console.log(JSON.stringify(data));
+             xhr.setRequestHeader("Content-Type", "application/json");
+             xhr.send(JSON.stringify(data));
+         } else xhr.send();
+         console.log(methodType + " request sent to the server");
+     });
+ } 
