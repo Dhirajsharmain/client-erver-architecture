@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/home.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,600;1,500&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Home | Employee Payroll</title>
+</head>
+
+<body>
+
+    <header class="header-content header">
+        <div class="logo-content">
+            <img src="../assets/images/logo.png" alt="Logo">
+            <div>
+                <span class="emp-text">EMPLOYEE</span>
+                <span class="emp-text emp-payroll">PAYROLL</span>
+            </div>
+        </div>
+    </header>
+    <!-- UC2 -->
+    <div class="main-content">
+        <div class="header-content">
+            <div class="emp-detail-text">
+                Employee Details <div class="emp-count">10</div>
+            </div>
+            <div class="header-button">
+                <button class="searchBtn"><img src="../assets/icons/search.svg" alt="search"></button>
+                <a href="../pages/employeePayrollForm.html" class="add-button"><img src="../assets/icons/add-24px.svg"
+                        alt="">Add user</a>
+            </div>
+        </div>
+    </div>
+
+    <table id="table-display" class="table">
+        <!-- UC3 -->
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Start Date</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>
+                <img class="profile" src="../assets/profile-images/Ellipse -2.png" alt="">
+            </td>
+            <td>Narayan Mahadevan</td>
+            <td>Male</td>
+            <td>
+                <div class="dept-label">HR</div>
+                <div class="dept-label">Engineer</div>
+            </td>
+            <td>300000</td>
+            <td>1 Nov 2020</td>
+            <td>
+                <img id="1" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
+                <img id="1" onclick="update(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
+            </td>
+        </tr>
+    </table>
+    <script defer src="../js/home.js"></script>
+    <script defer src="../js/utility.js"></script>
+    <script defer src="../js/site_properties.js"></script>
+</body>
+
+</html>
